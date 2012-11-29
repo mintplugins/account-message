@@ -61,7 +61,7 @@ if ( ! function_exists( 'mintthemes_account_msg' ) ):
 				echo ('<div id="mintthemes_account_msg_box" class="box">
 					<div class="above">
 						<h2>' . mintthemes_account_msg_get_plugin_option( 'the_title' ) .'</h2>
-						<p>' . mintthemes_account_msg_get_plugin_option( 'the_message' ) . '</p>
+						<p>' . html_entity_decode(mintthemes_account_msg_get_plugin_option( 'the_message' )) . '</p>
 						
 						
 						
@@ -114,7 +114,7 @@ function mintthemes_account_msg_plugin_options_init() {
 	add_settings_field(
 		'the_message',
 		__( 'Account Message', 'mintthemes_account_msg' ), 
-		'mintthemes_account_msg_settings_field_textarea',
+		'mintthemes_account_msg_settings_field_textarea_html',
 		'mintthemes_account_msg_options',
 		'settings',
 		array(
@@ -336,6 +336,32 @@ function mintthemes_account_msg_settings_field_textarea( $args = array() ) {
 ?>
 	<label for="<?php echo $id; ?>">
 		<textarea name="<?php echo $name; ?>" id="<?php echo $id; ?>" class="code large-text" rows="3" cols="30"><?php echo esc_textarea( $value ); ?></textarea>
+		<br />
+		<?php echo $description; ?>
+	</label>
+<?php
+} 
+
+/**
+ * HTML Textarea Field
+ *
+ * @since Account Message 1.0
+ */
+function mintthemes_account_msg_settings_field_textarea_html( $args = array() ) {
+	$defaults = array(
+		'name'        => '',
+		'value'       => '',
+		'description' => ''
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+	
+	$id   = esc_attr( $name );
+	$name = esc_attr( sprintf( 'mintthemes_account_msg_options[%s]', $name ) );
+?>
+	<label for="<?php echo $id; ?>">
+		<textarea name="<?php echo $name; ?>" id="<?php echo $id; ?>" class="code large-text" rows="3" cols="30"><?php echo html_entity_decode(esc_textarea( $value )); ?></textarea>
 		<br />
 		<?php echo $description; ?>
 	</label>
